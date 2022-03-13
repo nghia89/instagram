@@ -19,21 +19,28 @@ export default function App() {
   const colorScheme = useColorScheme();
 
   const [loggedIn, setLoggedIn] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   onAuthStateChanged(auth, user => {
     if (user != null) {
+      setLoading(false)
+      setLoggedIn(true)
       console.log('We are authenticated now!');
     } else
-
-      console.log('Un authenticated now!');
+      setLoading(false)
+    console.log('Un authenticated now!');
     // Do other things
   });
 
-  if (!isLoadingComplete)
+  if (!isLoadingComplete || loading)
     return <Image style={{
       padding: 200,
-      height: '100%',
-      width: '100%'
+      height: '50%',
+      width: '50%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      backgroundColor: '#FFFFFF'
     }} source={logo} />
   else if (!loggedIn)
     return <SafeAreaProvider>

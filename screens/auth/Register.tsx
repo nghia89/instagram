@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Button, ScrollView } from "react-native";
 import { iconSignIn } from "../../utils/svg";
 import layout from '../../constants/Layout'
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { IUser, registration } from "../../hooks/auth";
+
 
 const BackgroundSignIn = require('./../../assets/images/SignUp.png')
 interface IProps {
     navigation: NavigationProp<ParamListBase>
 };
 export default function Register(props: IProps) {
+    const [user, setUser] = useState<IUser>({ email: '', password: '' })
+
+    async function handleRegister() {
+        await registration(user)
+    }
 
     return <ScrollView
         showsVerticalScrollIndicator={false}
@@ -24,19 +31,29 @@ export default function Register(props: IProps) {
                     <View >
                         <TextInput
                             style={styles.textInput}
-                            placeholder="UserName"
-                        />
-                        <TextInput
-                            style={styles.textInput}
-                            placeholder="Họ và tên"
+                            placeholder="Full Name"
+                            value={user.fullName}
+                            onChangeText={(e) => setUser(u => ({ ...u, fullName: e }))}
                         />
                         <TextInput
                             style={styles.textInput}
                             placeholder="Email"
+                            value={user.email}
+                            onChangeText={(e) => setUser(u => ({ ...u, email: e }))}
                         />
                         <TextInput
                             style={styles.textInput}
                             placeholder="Password"
+                            value={user.password}
+                            secureTextEntry
+                            onChangeText={(e) => setUser(u => ({ ...u, password: e }))}
+                        />
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder="Confirm Password"
+                            value={user.password}
+                            secureTextEntry
+                            onChangeText={(e) => setUser(u => ({ ...u, password: e }))}
                         />
                     </View>
                     <View style={styles.viewSignIn}>
@@ -51,6 +68,7 @@ export default function Register(props: IProps) {
                         </View>
                         <TouchableOpacity
                             style={styles.button}
+                            onPress={() => handleRegister()}
                         >
                             {iconSignIn()}
                         </TouchableOpacity>

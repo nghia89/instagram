@@ -1,9 +1,11 @@
 
 export const firebaseConfig = {
-    apiKey: "AIzaSyD-Fpp_LeZbw-87dTHJdaVMAbqnTgkSquw",
-    authDomain: "aut-dev-df9bc.firebaseapp.com",
-    projectId: "aut-dev-df9bc",
-    storageBucket: "aut-dev-df9bc.appspot.com",
-    messagingSenderId: "369008530341",
-    appId: "1:369008530341:web:6d7603773c8162cacdce4c"
+    apiKey: "AIzaSyCCAsp33_uCNq15A5TwCAmm1ui1xETYLT4",
+    authDomain: "instagram-27d78.firebaseapp.com",
+    projectId: "instagram-27d78",
+    storageBucket: "instagram-27d78.appspot.com",
+    messagingSenderId: "1051892063207",
+    appId: "1:1051892063207:web:ac949729f966b102fafb42",
+    databaseURL: "instagram-27d78.firebaseio.com"
+
 };

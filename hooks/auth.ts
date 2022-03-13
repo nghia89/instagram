@@ -2,30 +2,69 @@
 import {
     getAuth,
     onAuthStateChanged,
-    FacebookAuthProvider,
-    signInWithCredential,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut
 } from 'firebase/auth';
-import * as Facebook from 'expo-facebook';
+
+import { Alert } from 'react-native';
+import { getFirestore, collection, setDoc, doc, addDoc } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../constants/Configs';
 
 
-const auth = getAuth();
+
+const app = initializeApp(firebaseConfig)
+const firestore = getFirestore(app);
+
+const auth = getAuth(app);
+
+export interface IUser {
+    email: string,
+    password: string,
+    fullName?: string,
+}
+export async function registration(user: IUser) {
+    try {
+        await createUserWithEmailAndPassword(auth, user.email, user.password);
+        const currentUser = auth.currentUser;
+
+        // if (currentUser?.uid) {
+
+        //     const ref = doc(firestore, "users", 'currentUser.uid');
+        //     await setDoc(ref, {
+        //         email: user.email,
+        //         fullName: user.fullName,
+        //     }).then((rsp) => console.log('rsp', rsp));
+        // }
+        if (currentUser?.uid) {
+            const ref = collection(firestore, 'users');
+            await addDoc(ref, {
+                id: currentUser.uid,
+                email: user.email,
+                fullName: user.fullName,
+            }).then((rsp) => console.log('rsp', rsp));
+        }
 
 
-export async function loginWithFacebook() {
-    await Facebook.initializeAsync('<FACEBOOK_APP_ID>');
+    } catch (err: any) {
+        console.log(err.message)
+        Alert.alert("There is something wrong!!!!", err.message);
+    }
+}
 
-    const { type, token }: any = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile'],
-    });
+export async function signIn(user: IUser) {
+    try {
+        await signInWithEmailAndPassword(auth, user.email, user.password);
+    } catch (err: any) {
+        Alert.alert("Thông báo", 'Tài khoản hoặc mật khẩu không đúng.');
+    }
+}
 
-    if (type === 'success') {
-        // Build Firebase credential with the Facebook access token.
-        const facebookAuthProvider = new FacebookAuthProvider();
-        const credential = facebookAuthProvider.credential(token);
-
-        // Sign in with credential from the Facebook user.
-        signInWithCredential(auth, credential).catch(error => {
-            // Handle Errors here.
-        });
+export async function loggingOut() {
+    try {
+        await signOut(auth);
+    } catch (err: any) {
+        Alert.alert('There is something wrong!', err.message);
     }
 }

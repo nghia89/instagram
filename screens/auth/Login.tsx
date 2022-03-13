@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Button, ScrollView } from "react-native";
 import { iconSignIn } from "../../utils/svg";
 import layout from '../../constants/Layout'
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { IUser, signIn } from "../../hooks/auth";
+
 
 const BackgroundSignIn = require('./../../assets/images/SignIn.png')
 
@@ -11,12 +13,18 @@ interface IProps {
 };
 export default function (props: IProps) {
 
-    return <ScrollView
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-    >
-        <View style={styles.container}>
-            <ImageBackground source={BackgroundSignIn} resizeMode="cover" style={styles.image}>
+    const [user, setUser] = useState<IUser>({ email: '', password: '' })
+
+    async function handleSignIn() {
+        await signIn(user)
+    }
+
+    return <ImageBackground source={BackgroundSignIn} resizeMode="cover" style={styles.image}>
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+        >
+            <View style={styles.container}>
 
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -27,10 +35,15 @@ export default function (props: IProps) {
                         <TextInput
                             style={styles.textInput}
                             placeholder="Email"
+                            value={user.email}
+                            onChangeText={(e) => setUser(u => ({ ...u, email: e }))}
                         />
                         <TextInput
                             style={styles.textInput}
                             placeholder="Password"
+                            secureTextEntry={true}
+                            value={user.password}
+                            onChangeText={(e) => setUser(u => ({ ...u, password: e }))}
                         />
                     </View>
                     <View style={styles.viewSignIn}>
@@ -45,7 +58,7 @@ export default function (props: IProps) {
                         </View>
                         <TouchableOpacity
                             style={styles.button}
-
+                            onPress={() => handleSignIn()}
                         >
                             {iconSignIn()}
                         </TouchableOpacity>
@@ -53,11 +66,12 @@ export default function (props: IProps) {
 
                 </KeyboardAvoidingView>
 
-            </ImageBackground>
 
-        </View>
 
-    </ScrollView >
+            </View>
+        </ScrollView >
+    </ImageBackground>
+
 }
 
 const styles = StyleSheet.create({
