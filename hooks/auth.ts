@@ -12,12 +12,9 @@ import { getFirestore, collection, setDoc, doc, addDoc } from 'firebase/firestor
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../constants/Configs';
 
-
-
-const app = initializeApp(firebaseConfig)
-const firestore = getFirestore(app);
-
-const auth = getAuth(app);
+initializeApp(firebaseConfig)
+const db = getFirestore();
+const auth = getAuth();
 
 export interface IUser {
     email: string,
@@ -28,28 +25,15 @@ export async function registration(user: IUser) {
     try {
         await createUserWithEmailAndPassword(auth, user.email, user.password);
         const currentUser = auth.currentUser;
-
-        // if (currentUser?.uid) {
-
-        //     const ref = doc(firestore, "users", 'currentUser.uid');
-        //     await setDoc(ref, {
-        //         email: user.email,
-        //         fullName: user.fullName,
-        //     }).then((rsp) => console.log('rsp', rsp));
-        // }
         if (currentUser?.uid) {
-            const ref = collection(firestore, 'users');
-            await addDoc(ref, {
-                id: currentUser.uid,
+            await setDoc(doc(db, "users", currentUser.uid), {
                 email: user.email,
                 fullName: user.fullName,
-            }).then((rsp) => console.log('rsp', rsp));
+            });
         }
-
-
     } catch (err: any) {
         console.log(err.message)
-        Alert.alert("There is something wrong!!!!", err.message);
+        Alert.alert("Thông báo", "Có lỗi xảy ra!");
     }
 }
 
@@ -57,6 +41,7 @@ export async function signIn(user: IUser) {
     try {
         await signInWithEmailAndPassword(auth, user.email, user.password);
     } catch (err: any) {
+        console.log(err.message)
         Alert.alert("Thông báo", 'Tài khoản hoặc mật khẩu không đúng.');
     }
 }
@@ -65,6 +50,7 @@ export async function loggingOut() {
     try {
         await signOut(auth);
     } catch (err: any) {
-        Alert.alert('There is something wrong!', err.message);
+        console.log(err.message)
+        Alert.alert("Thông báo", 'Có lỗi xảy ra!');
     }
 }
