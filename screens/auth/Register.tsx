@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Button, ScrollView } from "react-native";
+import {
+    View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput,
+    KeyboardAvoidingView, Platform, Button, ScrollView, ActivityIndicator, ToastAndroid, Alert
+} from "react-native";
 import { iconSignIn } from "../../utils/svg";
 import layout from '../../constants/Layout'
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
@@ -12,9 +15,18 @@ interface IProps {
 };
 export default function Register(props: IProps) {
     const [user, setUser] = useState<IUser>({ email: '', password: '' })
+    const [confirmPass, setConfirmPass] = useState<string>('')
+    const [loading, setLoading] = useState(false)
 
     async function handleRegister() {
-        await registration(user)
+        if (user.password != confirmPass)
+            Alert.alert('Thông báo', 'Mật khẩu không khớp.')
+        else {
+            setLoading(true)
+            await registration(user, (isSuccess: boolean) => {
+                if (!isSuccess) setLoading(false)
+            })
+        }
     }
 
     return <ScrollView
@@ -51,9 +63,9 @@ export default function Register(props: IProps) {
                         <TextInput
                             style={styles.textInput}
                             placeholder="Confirm Password"
-                            value={user.password}
+                            value={confirmPass}
                             secureTextEntry
-                            onChangeText={(e) => setUser(u => ({ ...u, password: e }))}
+                            onChangeText={(e) => setConfirmPass(e)}
                         />
                     </View>
                     <View style={styles.viewSignIn}>
@@ -67,10 +79,13 @@ export default function Register(props: IProps) {
 
                         </View>
                         <TouchableOpacity
+                            disabled={loading}
                             style={styles.button}
                             onPress={() => handleRegister()}
                         >
-                            {iconSignIn()}
+
+                            {loading ? <ActivityIndicator color="blue" /> : iconSignIn()}
+
                         </TouchableOpacity>
                     </View>
 

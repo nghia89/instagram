@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Button, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Button, ScrollView, ActivityIndicator } from "react-native";
 import { iconSignIn } from "../../utils/svg";
 import layout from '../../constants/Layout'
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
@@ -14,9 +14,12 @@ interface IProps {
 export default function (props: IProps) {
 
     const [user, setUser] = useState<IUser>({ email: '', password: '' })
-
+    const [loading, setLoading] = useState(false)
     async function handleSignIn() {
-        await signIn(user)
+        setLoading(true)
+        await signIn(user, (isSuccess: boolean) => {
+            if (!isSuccess) setLoading(false)
+        })
     }
 
     return <ImageBackground source={BackgroundSignIn} resizeMode="cover" style={styles.image}>
@@ -57,10 +60,11 @@ export default function (props: IProps) {
 
                         </View>
                         <TouchableOpacity
+                            disabled={loading}
                             style={styles.button}
                             onPress={() => handleSignIn()}
                         >
-                            {iconSignIn()}
+                            {loading ? <ActivityIndicator color="blue" /> : iconSignIn()}
                         </TouchableOpacity>
                     </View>
 

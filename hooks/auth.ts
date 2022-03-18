@@ -21,7 +21,7 @@ export interface IUser {
     password: string,
     fullName?: string,
 }
-export async function registration(user: IUser) {
+export async function registration(user: IUser, callBack?: Function) {
     try {
         await createUserWithEmailAndPassword(auth, user.email, user.password);
         const currentUser = auth.currentUser;
@@ -30,19 +30,21 @@ export async function registration(user: IUser) {
                 email: user.email,
                 fullName: user.fullName,
             });
+            callBack && callBack(true)
         }
     } catch (err: any) {
-        console.log(err.message)
         Alert.alert("Thông báo", "Có lỗi xảy ra!");
+        callBack && callBack(false)
     }
 }
 
-export async function signIn(user: IUser) {
+export async function signIn(user: IUser, callBack?: Function) {
     try {
         await signInWithEmailAndPassword(auth, user.email, user.password);
     } catch (err: any) {
         console.log(err.message)
         Alert.alert("Thông báo", 'Tài khoản hoặc mật khẩu không đúng.');
+        callBack && callBack(false)
     }
 }
 
