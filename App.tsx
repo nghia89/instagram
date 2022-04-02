@@ -10,6 +10,8 @@ import React, { useState } from 'react';
 import NavigationAuth from './navigation/NavigationAuth';
 import useCachedResources from './hooks/useCachedResources';
 import { Image } from 'react-native'
+import { Provider } from 'react-redux';
+import store from './store';
 const logo = require('./assets/images/icon.png')
 
 initializeApp(firebaseConfig);
@@ -26,9 +28,10 @@ export default function App() {
       setLoading(false)
       setLoggedIn(true)
       console.log('We are authenticated now!');
-    } else
+    } else {
       setLoading(false)
-    console.log('Un authenticated now!');
+      console.log('Un authenticated now!');
+    }
     // Do other things
   });
 
@@ -49,10 +52,13 @@ export default function App() {
     </SafeAreaProvider>
   else {
     return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <Navigation colorScheme={colorScheme} />
+          <StatusBar />
+        </SafeAreaProvider>
+      </Provider>
+
     );
   }
 }

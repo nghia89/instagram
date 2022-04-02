@@ -27,6 +27,7 @@ export async function registration(user: IUser, callBack?: Function) {
         const currentUser = auth.currentUser;
         if (currentUser?.uid) {
             await setDoc(doc(db, "users", currentUser.uid), {
+                id: currentUser.uid,
                 email: user.email,
                 fullName: user.fullName,
             });
