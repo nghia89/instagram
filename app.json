@@ -28,6 +28,14 @@
     },
     "web": {
       "favicon": "./assets/images/icon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Ứng dụng truy cập vào ảnh của bạn để cho phép bạn chia sẻ chúng với bạn bè của mình."
+        }
+      ]
+    ]
   }
 }
