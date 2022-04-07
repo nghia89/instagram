@@ -24,7 +24,13 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "MEDIA_LIBRARY"
+      ]
     },
     "web": {
       "favicon": "./assets/images/icon.png"
@@ -34,6 +40,14 @@
         "expo-image-picker",
         {
           "photosPermission": "Ứng dụng truy cập vào ảnh của bạn để cho phép bạn chia sẻ chúng với bạn bè của mình."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allows an application to read from external storage.",
+          "savePhotosPermission": "Allows an application to write to external storage.",
+          "isAccessMediaLocationEnabled": true
         }
       ]
     ]

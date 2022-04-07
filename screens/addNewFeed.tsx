@@ -4,7 +4,6 @@ import { Camera } from 'expo-camera';
 import { useEffect, useRef, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
-
 const windowHeight = Dimensions.get('screen').height;
 
 export default function AddNewFeed() {
