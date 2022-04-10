@@ -16,7 +16,7 @@ import Home from '../screens/home/index';
 import AddNewFeed from '../screens/addNewFeed';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import Profile from '../screens/profile';
+import SaveNewFeed from '../screens/saveNewFeed';
 import ChooseImg from '../screens/chooseImg';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -35,6 +35,7 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="MainAdd" component={AddNewFeed} options={{ headerShown: false }} />
+      <Stack.Screen name="SaveNewFeed" component={SaveNewFeed} options={{ headerShown: false }} initialParams={{}} />
     </Stack.Navigator>
   );
 }

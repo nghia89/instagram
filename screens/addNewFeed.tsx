@@ -3,10 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Dimensions, StatusBar, Image 
 import { Camera } from 'expo-camera';
 import { useEffect, useRef, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import { useLinkProps } from '@react-navigation/native';
 
 const windowHeight = Dimensions.get('screen').height;
 
-export default function AddNewFeed() {
+export default function AddNewFeed(props: any) {
   let cameraRef = useRef<any>()
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -91,6 +92,11 @@ export default function AddNewFeed() {
             style={styles.buttonTake}
             onPress={() => setUri('')}>
             <Text style={styles.text}> Chụp lại </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonTake}
+            onPress={() => props.navigation.navigate("SaveNewFeed", { uri })}>
+            <Text style={styles.text}> Lưu </Text>
           </TouchableOpacity>
         </View>
       </View>

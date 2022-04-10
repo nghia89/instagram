@@ -36,20 +36,8 @@
       "favicon": "./assets/images/icon.png"
     },
     "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "Ứng dụng truy cập vào ảnh của bạn để cho phép bạn chia sẻ chúng với bạn bè của mình."
-        }
-      ],
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Allows an application to read from external storage.",
-          "savePhotosPermission": "Allows an application to write to external storage.",
-          "isAccessMediaLocationEnabled": true
-        }
-      ]
+      "expo-image-picker",
+      "expo-media-library"
     ]
   }
 }
