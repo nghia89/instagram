@@ -13,6 +13,7 @@ initializeApp(firebaseConfig)
 const db = getFirestore();
 const auth = getAuth();
 const userRef = collection(db, "users");
+const postsRef = collection(db, "posts");
 
 
 
@@ -31,12 +32,9 @@ export async function getUserAuth() {
 
 
 export async function AdPostData(body: Object) {
-    var id = uuid.v4().toString();
-    if (auth.currentUser?.uid && id) {
-
-        await setDoc(doc(db, 'Posts', id), {
+    if (auth.currentUser?.uid) {
+        await addDoc(postsRef, {
             ...body,
-            id: id,
             uid: auth.currentUser?.uid,
             createAt: Timestamp.now()
         }).then((rsp) => { return rsp });
@@ -44,5 +42,27 @@ export async function AdPostData(body: Object) {
         return null;
 }
 
+export async function GetUserPosts() {
+    let _data: any[] = []
+    if (auth.currentUser?.uid) {
+        const q = query(postsRef, where("uid", "==", auth.currentUser.uid))
+        const _query = await getDocs(q);
+        _query.forEach((doc) => {
+            _data.push(doc.data());
+        })
+    }
+    return _data;
+}
 
 
+export async function GetPostsDoc(id: string) {
+    const docRef = doc(db, "posts", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        return docSnap.data().data;
+    } else {
+        console.log("No such document!");
+        return null;
+    }
+}
